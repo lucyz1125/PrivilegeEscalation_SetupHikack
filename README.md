@@ -4,19 +4,25 @@
 
 ## Overview
 
-**SetupHijack** is a security research tool that exploits race conditions and insecure file handling in Windows installer and update processes. It targets scenarios where privileged installers or updaters drop files in `%TEMP%` or other world-writable locations, allowing an attacker to replace these files before they are executed with elevated privileges.
+**SetupHijack** is a security research tool designed to exploit race conditions and insecure file handling in Windows installer and updater processes. It targets scenarios where privileged installers or updaters drop executable files into world-writable directories—such as `%TEMP%`, `%APPDATA%`, or `%USERPROFILE%\Downloads`—and subsequently execute them with elevated privileges (e.g., as Administrator or SYSTEM).
 
-- Does **not** require elevated permissions to run.
-- Does **not** use file system notifications (polls for changes instead).
-- Exploits weaknesses in Authenticode code signing and installer trust models.
-- Can infect `.exe`, `.msi`, and batch files (e.g., `sysinfo`, `netstat`, `ipconfig`).
-- Designed for red team, penetration testing, and security research use only.
+By replacing these dropped files with a user-supplied payload before execution, an attacker can achieve privilege escalation without requiring initial elevated permissions.
 
-The intended use of this tool is to run in the background on a compromised user account with privileges, in order to elevate another process by hijacking installer/updater file drops. 
+> ⚠️ **For authorized red teaming, penetration testing, and security research only.**
 
-The chart below shows real-world example use cases of this exploit in multiple scenarios that can be used for UAC bypass. UAC bypasses are considered a security boundary when running under Adminless and are a common "attacker requirement" for disabling security controls. Exploitation of privileged Administrator operations provides generic exploit accessibility for malicious code to side-load or escalate process privileges. This tool can be used to identify additional applications which are exposed to the same types of risk, an attacker can wait for execution of these processes as a means to gain elevated rights without disrupting user behaviors. 
+---
 
-![SetupHijack Vulnerability Discovery Chart](Chart.png)
+## Key Features
+
+- Runs without elevated privileges.
+- Does not rely on file system notifications; uses polling instead for greater compatibility.
+- Supports infection of `.exe`, `.msi`, and `.bat` files (e.g., common utilities like `ipconfig`, `netstat`, or custom-named binaries).
+- Preserves original files as `.bak` backups for recovery.
+- Maintains a skiplist to avoid re-infecting the same file repeatedly.
+- Logs all actions with timestamps.
+- Can be used to identify applications vulnerable to UAC bypass via temporary file manipulation.
+
+---
 
 ## How It Works
 
