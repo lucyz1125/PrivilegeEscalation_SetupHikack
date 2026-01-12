@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="InstallRenge"
+           Manufacturer="Test"
+           Version="1.0.0.0"
+           Language="1033"
+           InstallerVersion="500"
+           UpgradeCode="12345678-1234-1234-1234-123456789012">
+    <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
+    <StandardDirectory Id="ProgramFilesFolder">
+      <Directory Id="INSTALLFOLDER" Name="InstallRenge">
+        <Component Id="RengeComponent" Guid="*">
+          <File Id="RengeExeFile" Source="PAYLOAD_PLACEHOLDER" KeyPath="yes"/>
+          <File Id="LaunchPayloadBat" Source="launch_payload.bat"/>
+        </Component>
+      </Directory>
+    </StandardDirectory>
+    <Feature Id="ProductFeature" Title="InstallRenge" Level="1">
+      <ComponentRef Id="RengeComponent" />
+    </Feature>
+  <CustomAction Id="RunRenge"
+          FileRef="LaunchPayloadBat"
+          ExeCommand=""
+          Execute="deferred"
+          Return="ignore"
+          Impersonate="no"/>
+    <InstallExecuteSequence>
+      <Custom Action="RunRenge" After="InstallFiles" Condition="NOT Installed"/>
+    </InstallExecuteSequence>
+  </Package>
+</Wix>
