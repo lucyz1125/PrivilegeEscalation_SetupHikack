@@ -1,6 +1,6 @@
 # PrivilegeEscalation_SetupHijack
 
-[中文文档](https://github.com/hackerhouse-opensource/SignToolEx)
+[中文文档](https://github.com/lucyz1125/PrivilegeEscalation_SetupHikack/blob/main/README_ZH.md)
 
 ---
 
